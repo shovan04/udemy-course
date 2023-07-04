@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 
 def get_courses():
-    response = requests.get("http://192.168.0.107:5000/getcourses")
+    response = requests.get("https://free-udemy-course.onrender.com/getcourses")
     if response.status_code == 200:
         print("Courses updated successfully")
 
@@ -81,7 +81,7 @@ def check_course_links():
 
 
 @app.route('/')
-def update_courses():
+def index():
     scheduler = BackgroundScheduler()
     scheduler.add_job(func=get_courses, trigger="interval", hours=1)
     scheduler.start()
@@ -89,4 +89,4 @@ def update_courses():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=10000)
