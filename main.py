@@ -4,18 +4,21 @@ import requests
 import json
 from bs4 import BeautifulSoup
 from flask import Flask, jsonify
-from apscheduler.schedulers.background import BackgroundScheduler
+import threading
 
 app = Flask(__name__)
 
 
 def get_courses():
-    dev_url = 'http://127.0.0.1:10000'
-    production_url = 'https://free-udemy-course.onrender.com'
+    while True:
+        dev_url = 'http://127.0.0.1:10000'
+        production_url = 'https://free-udemy-course.onrender.com'
 
-    response = requests.get(f"{production_url}/getcourses")
-    if response.status_code == 200:
-        print("Courses updated successfully")
+        response = requests.get(f"{production_url}/getcourses")
+        if response.status_code == 200:
+            print("Courses updated successfully")
+
+        time.sleep(1800)
 
 
 @app.route('/getcourses/', methods=['GET', 'POST'])
@@ -86,11 +89,12 @@ def check_course_links():
 
 @app.route('/')
 def index():
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(func=get_courses, trigger="interval", minutes=30)
-    scheduler.start()
     return "Task scheduled to update courses every 30 Minutes."
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000, debug=True)
+    thread = threading.Thread(target=get_courses)
+    thread.daemon = True
+    thread.start()
+
+    app.run(host='0.0.0.0', port=10000, debug=False)
