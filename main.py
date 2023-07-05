@@ -80,9 +80,9 @@ def check_course_links():
                 if r.status_code == 200:
                     print("New course added:", new_course['title'])
 
-        # Save the course links to a JSON file
-        with open('course_links.json', 'w') as f:
-            json.dump(course_links, f, indent=4)
+    # Save the course links to a JSON file
+    with open('course_links.json', 'w') as f:
+        json.dump(course_links, f, indent=4)
 
     return jsonify(r.text)
 
