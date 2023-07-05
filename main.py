@@ -89,7 +89,11 @@ def check_course_links():
 
 @app.route('/')
 def index():
-    return "Task scheduled to update courses every 30 Minutes."
+    old_course_links
+    with open('course_links.json', 'r') as f:
+            old_course_links = json.load(f)
+
+    return jsonify(old_course_links)
 
 
 if __name__ == '__main__':
