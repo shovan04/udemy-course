@@ -10,13 +10,17 @@ app = Flask(__name__)
 
 
 def get_courses():
-    response = requests.get("https://free-udemy-course.onrender.com/getcourses")
+    dev_url = 'http://127.0.0.1:10000'
+    production_url = 'https://free-udemy-course.onrender.com'
+
+    response = requests.get(f"{dev_url}/getcourses")
     if response.status_code == 200:
         print("Courses updated successfully")
 
 
 @app.route('/getcourses/', methods=['GET', 'POST'])
 def check_course_links():
+    r= ''
     url = "https://www.discudemy.com/all"
     response = requests.get(url, headers={
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -73,9 +77,9 @@ def check_course_links():
                 if r.status_code == 200:
                     print("New course added:", new_course['title'])
 
-    # Save the course links to a JSON file
-    with open('course_links.json', 'w') as f:
-        json.dump(course_links, f, indent=4)
+                # Save the course links to a JSON file
+                with open('course_links.json', 'w') as f:
+                    json.dump(course_links, f, indent=4)
 
     return jsonify(r.text)
 
@@ -83,10 +87,10 @@ def check_course_links():
 @app.route('/')
 def index():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=get_courses, trigger="interval", hours=1)
+    scheduler.add_job(func=get_courses, trigger="interval", minutes=30)
     scheduler.start()
-    return "Task scheduled to update courses every hour."
+    return "Task scheduled to update courses every 30 Minutes."
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000)
+    app.run(host='0.0.0.0', port=10000, debug=True)
