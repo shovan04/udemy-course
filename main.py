@@ -14,7 +14,7 @@ def get_courses():
         dev_url = 'http://127.0.0.1:10000'
         production_url = 'https://free-udemy-course.onrender.com'
 
-        response = requests.get(f"{production_url}/getcourses")
+        response = requests.get(f"{production_url}/getcourses/")
         if response.status_code == 200:
             print("Courses updated successfully")
 
@@ -80,9 +80,9 @@ def check_course_links():
                 if r.status_code == 200:
                     print("New course added:", new_course['title'])
 
-                # Save the course links to a JSON file
-                with open('course_links.json', 'w') as f:
-                    json.dump(course_links, f, indent=4)
+        # Save the course links to a JSON file
+        with open('course_links.json', 'w') as f:
+            json.dump(course_links, f, indent=4)
 
     return jsonify(r.text)
 
